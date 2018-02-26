@@ -1,5 +1,8 @@
 const { makeExecutableSchema, addMockFunctionsToSchema } = require('graphql-tools')
 const casual = require('casual')
+const Course = require('./models/Courses')
+const Professor = require('./models/Professors')
+
 const typeDefs = `
     # This is a course on the system
     type Course {
@@ -15,7 +18,7 @@ const typeDefs = `
     type Professor {
         id: ID!
         name: String!
-        nationatily: String!
+        nationality: String!
         gender: Gender
         courses: [Course]
     }
@@ -40,57 +43,76 @@ const typeDefs = `
 `
 
 const resolvers = {
-	Query: {
-		courses: () => {
-			return [{
-				id: 1,
-				title: 'Course GraphQl',
-				description: 'Learning GraphQl'
-			}, {
-				id: 2,
-				title: 'Course Nodejs',
-				description: 'Learning Nodejs'
-			}]
-		}
-	},
-	Course: {
-		professor: () => {
-			return {
-				id: 1,
-				name: 'Cristian',
-				nationatily: 'Colombian'
-			}
-		},
-		comments: () => {
-			return [{
-				name: 'great',
-				body: 'A great course to start with graphql'
-			}]
-		}
-	}
+  Query: {
+    courses: () => Course.query().eager('[professor, comments]'),
+    professors: () => Professor.query().eager('course'),
+    course: (rootValue, args) => Course.query().eager('[professor, comments]').findById(args.id),
+    professor: (rootValue, args) => Professor.query().findById(args.id)
+
+    // {
+    //   return [{
+    //     id: 1,
+    //     title: 'Course GraphQl',
+    //     description: 'Learning GraphQl'
+    //   }, {
+    //     id: 2,
+    //     title: 'Course Nodejs',
+    //     description: 'Learning Nodejs'
+    //   }]
+    // }
+  },
+  //   Course: {
+  //     professor: () => {
+  //       return {
+  //         id: 1,
+  //         name: 'Cristian',
+  //         nationatily: 'Colombian'
+  //       }
+  //     },
+  //     comments: () => {
+  //       return [{
+  //         name: 'great',
+  //         body: 'A great course to start with graphql'
+  //       }]
+  //     }
+  //   }
 }
-const schema = makeExecutableSchema({ 
-	typeDefs, 
-	resolvers
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
 })
 
-addMockFunctionsToSchema({
-	schema,
-	mocks:{
-		Course: () => {
-			return {
-				id: casual.uuid,
-				title: casual.sentence,
-				description: casual.sentences(2)
-			}
-		},
-		Professor: () => {
-			return {
-				name: casual.name,
-				nationatily: casual.country
-			}
-		}
-	}, preserveResolvers: true
-})
+// addMockFunctionsToSchema({
+//   schema,
+//   mocks: {
+//     Course: () => {
+//       return {
+//         id: casual.uuid,
+//         title: casual.sentence,
+//         description: casual.sentences(2)
+//       }
+//     },
+//     Professor: () => {
+//       return {
+//         name: casual.name,
+//         nationatily: casual.country
+//       }
+//     }
+//   },
+//   preserveResolvers: true
+// })
 
 module.exports = schema
+
+// { 
+// 	courses {
+// 		title
+//     professor{
+//       name
+//       nationality
+//     }
+//     comments{
+//       name
+//     }
+// 	}
+// }
