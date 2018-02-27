@@ -9,6 +9,11 @@ const rootQuery = `
         course(id: Int): Course
         professor(id: Int): Professor
     }
+
+    type Mutation {
+        professorAdd(professor: newProfessor): Professor
+        professorEdit(professorId: Int!, professor: editProfessor): Professor
+    }
 `
 const schema = makeExecutableSchema({
   typeDefs: [rootQuery, Professor, Course],
@@ -16,3 +21,12 @@ const schema = makeExecutableSchema({
 })
 
 module.exports = schema
+
+// mutation editProfessor {
+//     professorEdit(professorId: 41,professor:{
+//       name:"Yessika Ortega"
+//     }){
+//       id
+//       name
+//     }
+//   }

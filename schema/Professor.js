@@ -11,4 +11,16 @@ module.exports = `
         MALE
         FEMALE
     }
+
+    input newProfessor {
+      name: String!
+      nationality: String!
+      gender: Gender
+    }
+
+    input editProfessor {
+      name: String
+      nationality: String
+      gender: Gender
+    }
   `

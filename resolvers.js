@@ -11,6 +11,14 @@ const resolvers = {
     },
     course: (rootValue, args) => Course.query().eager('[professor, comments]').findById(args.id),
     professor: (rootValue, args) => Professor.query().findById(args.id)
+  },
+  Mutation: {
+    professorAdd: (_, args) => {
+      return Professor.query().insert(args.professor)
+    },
+    professorEdit: (_, args) => {
+      return Professor.query().patchAndFetchById(args.professorId, args.professor)
+    }
   }
 }
 
