@@ -5,7 +5,6 @@ exports.up = (knex, Promise) => (
       table.string('title')
       table.string('description')
       table.integer('professor_id').unsigned()
-      table.string('gender')
       table.double('rating').unsigned()
     })
   ])

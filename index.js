@@ -9,7 +9,12 @@ const app = express()
 app.use(
   '/graphql',
   bodyParser.json(),
-  graphqlExpress({ schema })
+  graphqlExpress({
+    schema,
+    formatError: (error) => {
+      return { message: error.message }
+    }
+  })
 )
 
 app.use(
@@ -20,5 +25,5 @@ app.use(
 )
 const PORT = 5678
 app.listen(PORT, () => {
-  console.log('Server running on port 5678')
+  console.log('Server running on port 5679')
 })

@@ -15,4 +15,16 @@ module.exports = `
       name: String!
       body: String!
     }
+
+    input newCourse {
+      title: String!
+      description: String!
+      rating: Float
+    }
+
+    input editCourse {
+      title: String
+      description: String
+      rating: Float
+    }
   `
